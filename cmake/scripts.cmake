@@ -14,18 +14,18 @@ endfunction()
 
 
 
-function (create_script_coverage BINARY FILE_SCOPE)
+function (create_script_coverage BINARY SCOPE)
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        create_script_llvm_coverage(${BINARY} ${FILE_SCOPE})
+        create_script_llvm_coverage(${BINARY} "${SCOPE}")
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        create_script_gcc_coverage(${BINARY} ${FILE_SCOPE})
+        create_script_gcc_coverage(${BINARY} "${SCOPE}")
 	endif()
 endfunction()
 
 
 
 
-function (create_script_llvm_coverage BINARY FILE_SCOPE)
+function (create_script_llvm_coverage BINARY SCOPE)
     file(WRITE ${CMAKE_BINARY_DIR}/s_${BINARY}_cover.sh
 "#!/bin/bash
 NAME=\"${BINARY}\"
@@ -51,13 +51,13 @@ $LLVM_DIR/llvm-cov show \
 -show-line-counts-or-regions \
 -Xdemangler c++filt \
 -format=\"html\" \
--instr-profile=$COVERAGE_DIR/$COVERAGE_FILE.profdata ${BINARY} ${FILE_SCOPE}")
+-instr-profile=$COVERAGE_DIR/$COVERAGE_FILE.profdata ${BINARY} ${SCOPE}")
 endfunction()
 
 
 
 
-function (create_script_gcc_coverage BINARY FILE_SCOPE)
+function (create_script_gcc_coverage BINARY SCOPE)
     file(WRITE ${CMAKE_BINARY_DIR}/s_${BINARY}_cover.sh
 "#!/bin/bash
 NAME=\"${BINARY}\"
@@ -73,10 +73,23 @@ else
     exit 1
 fi
 
+# Execute binary to get the call traces
 ./${BINARY}
-find $PWD -type f -name ${BINARY}*.gcno -exec cp {} $COVERAGE_DIR 2>/dev/null \;
 
-if [ -z \"${FILE_SCOPE}\" ]
+# Replace _ with -
+rep=\"${BINARY}\"
+NEW_BIN=\$\{rep//[_]/-\}
+
+# Find gcno file
+find $PWD -type f -name $NEW_BIN*.gcno -exec cp {} $COVERAGE_DIR 2>/dev/null \;
+if [[ -z $(find $COVERAGE_DIR -type f -name $NEW_BIN*.gcno) ]]
+then
+    echo \"Could not find file with pattern '$NEW_BIN*.gcno'\"
+    exit 1
+fi
+
+# Generate report
+if [ -z \"${SCOPE}\" ]
 then
     cd $COVERAGE_DIR && \
     gcovr -r ${PROJECT_SOURCE_DIR}/ \
@@ -86,7 +99,7 @@ else
     cd $COVERAGE_DIR && \
     gcovr -r ${PROJECT_SOURCE_DIR}/ \
     --html --html-details \
-    -f ${FILE_SCOPE} \
+    -f ${SCOPE} \
     -o ${BINARY}_coverage.html
 fi
 ")
