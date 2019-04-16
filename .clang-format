@@ -1,0 +1,20 @@
+BraceWrapping:
+  AfterClass:       true
+  AfterControlStatement: true
+  AfterEnum:        true
+  AfterFunction:    true
+  AfterNamespace:   false
+  AfterObjCDeclaration: true
+  AfterStruct:      true
+  AfterUnion:       true
+  BeforeCatch:      true
+  BeforeElse:       true
+  IndentBraces:     false
+BreakBeforeBraces: Custom
+SortIncludes:       false
+ColumnLimit:        120
+MaxEmptyLinesToKeep:                        100
+AllowAllParametersOfDeclarationOnNextLine:  true
+AllowShortBlocksOnASingleLine:              true
+AllowShortFunctionsOnASingleLine:           false
+IndentCaseLabels:                           true
