@@ -14,6 +14,17 @@ endfunction()
 
 
 
+function (create_script_coverage BINARY FILE_SCOPE)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        create_script_llvm_coverage(${BINARY} ${FILE_SCOPE})
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        create_script_gcc_coverage(${BINARY} ${FILE_SCOPE})
+	endif()
+endfunction()
+
+
+
+
 function (create_script_llvm_coverage BINARY FILE_SCOPE)
     file(WRITE ${CMAKE_BINARY_DIR}/s_${BINARY}_cover.sh
 "#!/bin/bash
@@ -38,6 +49,7 @@ $LLVM_DIR/llvm-profdata merge -sparse $COVERAGE_DIR/$COVERAGE_FILE.profraw -o $C
 $LLVM_DIR/llvm-cov show \
 -output-dir=$COVERAGE_DIR \
 -show-line-counts-or-regions \
+-Xdemangler c++filt \
 -format=\"html\" \
 -instr-profile=$COVERAGE_DIR/$COVERAGE_FILE.profdata ${BINARY} ${FILE_SCOPE}")
 endfunction()
