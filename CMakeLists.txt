@@ -112,7 +112,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" ST
                     File folder:    /etc/sysctl.d/
                     Create file:    60-core-pattern.conf
 					Lines:          kernel.core_pattern = /var/crash/mycoredump%e_%t_%p
-					Note:			The path of the core pattern must be locally (OS partion).
+					Note:           The path of the core pattern must be locally (OS partion).
 
 	]]
 	add_executable(cored "${PROJECT_SOURCE_DIR}/cored.cpp")
