@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.8)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-include(scripts)
+include(BinaryWrapper)
 set(CMAKE_CXX_STANDARD 11)
 set(REPORT_FOLDER "Reports")# Set to "" if you wish to report to stderr
 

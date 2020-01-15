@@ -2,3 +2,4 @@
 build/
 .directory
 CMakeSettings.json
+.ccls-cache/
