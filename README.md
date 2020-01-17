@@ -1,10 +1,11 @@
-## CMake setup example
-This setup will introduce you into sanitizing code, coverage & core dumping.
+## Sanitize Coredump Coverage
+This cmake project will introduce you into sanitizing code, core dumping & coverage.
 It has been used on ubuntu 18.04 with clang & gnu compiler.
 It just focuses on setting the project up and using the tools.  
 Instead of [MemorySanitizer](https://clang.llvm.org/docs/MemorySanitizer.html) we will be using [Valgrind](http://valgrind.org/)
  for uninitialized reads, because all code needs to be instrumented with the sanitizer.  
 Additionally a cmake module is included to create the testing scripts and can also be used for other things.  
+Everything else is explained in the [CMakeLists.txt](https://github.com/reapler/sanitize-coredump-coverage/blob/master/CMakeLists.txt).
 
 
 This project use these utilities:
