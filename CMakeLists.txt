@@ -36,6 +36,12 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" ST
 	set(GLOBAL_LINK_LIBRARIES "")
 	include_directories(${PROJECT_SOURCE_DIR} "${PROJECT_SOURCE_DIR}/src")
 
+    # libtest
+	add_library(libtest "${PROJECT_SOURCE_DIR}/libtest.cpp")
+	target_compile_options(libtest PRIVATE  -fsanitize=thread ${GLOBAL_COMPILER_FLAGS})
+	set_target_properties(libtest PROPERTIES LINK_FLAGS "-fsanitize=thread ${GLOBAL_LINKER_FLAGS}")
+	target_link_libraries(libtest ${GLOBAL_LINK_LIBRARIES})
+
 	# AddressSanitizer
 	# https://clang.llvm.org/docs/AddressSanitizer.html
 	add_executable(asan "${PROJECT_SOURCE_DIR}/asan.cpp")
@@ -49,7 +55,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR "${CMAKE_CXX_COMPILER_ID}" ST
 	add_executable(tsan "${PROJECT_SOURCE_DIR}/tsan.cpp")
 	target_compile_options(tsan PRIVATE -fsanitize=thread ${GLOBAL_COMPILER_FLAGS})
 	set_target_properties(tsan PROPERTIES LINK_FLAGS "-fsanitize=thread ${GLOBAL_LINKER_FLAGS}")
-	target_link_libraries(tsan ${GLOBAL_LINK_LIBRARIES})
+	target_link_libraries(tsan ${GLOBAL_LINK_LIBRARIES} libtest)
 	create_script_tsan(tsan "${REPORT_FOLDER}")
 
 	# UndefinedBehaviorSanitizer

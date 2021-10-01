@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include "libtest.h"
 
 int global = 0;
 
@@ -33,6 +34,7 @@ void error3()
 
 int main(int argc, char **argv) 
 {
-    error3();
+    //error3();
+    test();
     return 0;
 }
